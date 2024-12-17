@@ -42,7 +42,7 @@ abstract class SinglePageFormCubit extends FormCubit<SinglePageFormState> {
     this.fields.addAll(newFields);
     for (var c in newFields) {
       c.stream.listen((state) {
-        if (state.skipValidation) {
+        if (!state.skipValidation) {
           validateForm();
         }
       });

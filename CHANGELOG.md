@@ -1,3 +1,6 @@
+## 3.0.4
+- Bump up bloc version
+  
 ## 3.0.3
 - Bump up bloc version
 

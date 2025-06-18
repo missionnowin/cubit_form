@@ -24,6 +24,7 @@ class CubitFormTextField extends StatefulWidget {
     this.isDisabled = false,
     this.onEditingComplete,
     this.textInputAction = TextInputAction.done,
+    this.autocorrect = false,
   });
 
   final FieldCubit<String> formFieldCubit;
@@ -43,6 +44,7 @@ class CubitFormTextField extends StatefulWidget {
   final bool isDisabled;
   final VoidCallback? onEditingComplete;
   final TextInputAction textInputAction;
+  final bool autocorrect;
 
   @override
   CubitFormTextFieldState createState() => CubitFormTextFieldState();
@@ -73,7 +75,8 @@ class CubitFormTextFieldState extends State<CubitFormTextField> {
 
       controller.text = state.value;
       controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: controller.text.length));
+        TextPosition(offset: controller.text.length),
+      );
     }
   }
 
@@ -94,33 +97,35 @@ class CubitFormTextFieldState extends State<CubitFormTextField> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FieldCubit, FieldCubitState>(
-        bloc: widget.formFieldCubit,
-        builder: (context, state) {
-          return TextField(
-            onTapOutside: (event) {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            onEditingComplete: widget.onEditingComplete,
-            autofocus: widget.autofocus,
-            enabled: !widget.isDisabled,
-            maxLines: widget.maxLines,
-            cursorColor: widget.cursorColor,
-            focusNode: widget.focusNode,
-            textAlign: widget.textAlign ?? TextAlign.left,
-            style: widget.style ?? Theme.of(context).textTheme.titleMedium,
-            keyboardType: widget.keyboardType,
-            controller: controller,
-            obscureText: widget.obscureText,
-            textInputAction: widget.textInputAction,
-            decoration: widget.decoration.copyWith(
-              prefixStyle:
-                  widget.style ?? Theme.of(context).textTheme.titleMedium,
-              prefixText: widget.prefixText,
-              hintText: widget.hintText,
-            ),
-            inputFormatters: widget.inputFormatters,
-            scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20.0),
-          );
-        });
+      bloc: widget.formFieldCubit,
+      builder: (context, state) {
+        return TextField(
+          onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          onEditingComplete: widget.onEditingComplete,
+          autocorrect: widget.autocorrect,
+          autofocus: widget.autofocus,
+          enabled: !widget.isDisabled,
+          maxLines: widget.maxLines,
+          cursorColor: widget.cursorColor,
+          focusNode: widget.focusNode,
+          textAlign: widget.textAlign ?? TextAlign.left,
+          style: widget.style ?? Theme.of(context).textTheme.titleMedium,
+          keyboardType: widget.keyboardType,
+          controller: controller,
+          obscureText: widget.obscureText,
+          textInputAction: widget.textInputAction,
+          decoration: widget.decoration.copyWith(
+            prefixStyle:
+                widget.style ?? Theme.of(context).textTheme.titleMedium,
+            prefixText: widget.prefixText,
+            hintText: widget.hintText,
+          ),
+          inputFormatters: widget.inputFormatters,
+          scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20.0),
+        );
+      },
+    );
   }
 }

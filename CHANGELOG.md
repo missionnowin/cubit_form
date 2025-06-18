@@ -1,3 +1,5 @@
+## 3.0.5
+- add autocorrect 
 ## 3.0.4
 - Bump up bloc version
   

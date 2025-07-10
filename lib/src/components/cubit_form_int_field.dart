@@ -21,6 +21,7 @@ class CubitFormIntField extends StatefulWidget {
     this.prefixText,
     this.hintText,
     this.onEditingComplete,
+    this.autofillHints = const <String>[],
   }) : super(key: key);
 
   final FieldCubit<int> formFieldCubit;
@@ -36,6 +37,8 @@ class CubitFormIntField extends StatefulWidget {
   final int maxLines;
   final bool autofocus;
   final VoidCallback? onEditingComplete;
+  final List<String> autofillHints;
+
   @override
   CubitFormIntFieldState createState() => CubitFormIntFieldState();
 }
@@ -47,11 +50,12 @@ class CubitFormIntFieldState extends State<CubitFormIntField> {
   @override
   void initState() {
     controller = TextEditingController(
-        text: widget.formFieldCubit.state.value.toString())
-      ..addListener(() {
-        widget.formFieldCubit.setValue(
-            controller.text.isNotEmpty ? int.parse(controller.text) : 0);
-      });
+      text: widget.formFieldCubit.state.value.toString(),
+    )..addListener(() {
+      widget.formFieldCubit.setValue(
+        controller.text.isNotEmpty ? int.parse(controller.text) : 0,
+      );
+    });
     subscription = widget.formFieldCubit.stream.listen(_cubitListener);
     super.initState();
   }
@@ -67,7 +71,8 @@ class CubitFormIntFieldState extends State<CubitFormIntField> {
 
       controller.text = state.value.toString();
       controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: controller.text.length));
+        TextPosition(offset: controller.text.length),
+      );
     }
   }
 
@@ -88,49 +93,51 @@ class CubitFormIntFieldState extends State<CubitFormIntField> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FieldCubit, FieldCubitState>(
-        bloc: widget.formFieldCubit,
-        builder: (context, state) {
-          return TextField(
-            onEditingComplete: widget.onEditingComplete,
-            onTapOutside: (event) {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            autofocus: widget.autofocus,
-            maxLines: widget.maxLines,
-            cursorColor: widget.cursorColor,
-            focusNode: widget.focusNode,
-            textAlign: widget.textAlign ?? TextAlign.left,
-            style: widget.style ?? Theme.of(context).textTheme.titleMedium,
-            keyboardType: TextInputType.number,
-            controller: controller,
-            obscureText: widget.obscureText,
-            onChanged: (value) {
-              var selection = controller.selection;
-              final RegExp regexp = new RegExp(r'^0+(?=.)');
-              var match = regexp.firstMatch(value);
+      bloc: widget.formFieldCubit,
+      builder: (context, state) {
+        return TextField(
+          onEditingComplete: widget.onEditingComplete,
+          onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          autofocus: widget.autofocus,
+          autofillHints: widget.autofillHints,
+          maxLines: widget.maxLines,
+          cursorColor: widget.cursorColor,
+          focusNode: widget.focusNode,
+          textAlign: widget.textAlign ?? TextAlign.left,
+          style: widget.style ?? Theme.of(context).textTheme.titleMedium,
+          keyboardType: TextInputType.number,
+          controller: controller,
+          obscureText: widget.obscureText,
+          onChanged: (value) {
+            var selection = controller.selection;
+            final RegExp regexp = new RegExp(r'^0+(?=.)');
+            var match = regexp.firstMatch(value);
 
-              var matchLengh = match?.group(0)?.length ?? 0;
-              if (matchLengh != 0) {
-                controller.text = value.replaceAll(regexp, '');
-                controller.selection = TextSelection.fromPosition(
-                  TextPosition(
-                    offset: math.min(matchLengh, selection.extent.offset),
-                  ),
-                );
-              }
-            },
-            decoration: widget.decoration.copyWith(
-              prefixStyle:
-                  widget.style ?? Theme.of(context).textTheme.titleMedium,
-              prefixText: widget.prefixText,
-              hintText: widget.hintText,
-              errorText: state.isErrorShown ? state.error : null,
-            ),
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            scrollPadding: widget.scrollPadding ?? EdgeInsets.all(20.0),
-          );
-        });
+            var matchLengh = match?.group(0)?.length ?? 0;
+            if (matchLengh != 0) {
+              controller.text = value.replaceAll(regexp, '');
+              controller.selection = TextSelection.fromPosition(
+                TextPosition(
+                  offset: math.min(matchLengh, selection.extent.offset),
+                ),
+              );
+            }
+          },
+          decoration: widget.decoration.copyWith(
+            prefixStyle:
+                widget.style ?? Theme.of(context).textTheme.titleMedium,
+            prefixText: widget.prefixText,
+            hintText: widget.hintText,
+            errorText: state.isErrorShown ? state.error : null,
+          ),
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          scrollPadding: widget.scrollPadding ?? EdgeInsets.all(20.0),
+        );
+      },
+    );
   }
 }

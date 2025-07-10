@@ -5,12 +5,8 @@ import '../../../cubit_form.dart';
 part 'single_page_state.dart';
 
 abstract class SinglePageFormCubit extends FormCubit<SinglePageFormState> {
-  SinglePageFormCubit({
-    bool isProtected = true,
-  }) : super(
-          _initState,
-          isProtected: isProtected,
-        );
+  SinglePageFormCubit({bool isProtected = true})
+    : super(_initState, isProtected: isProtected);
 
   static SinglePageFormState _initState = SinglePageFormState(
     isInitial: true,
@@ -55,10 +51,7 @@ abstract class SinglePageFormCubit extends FormCubit<SinglePageFormState> {
     var isInitial = fields.every((field) => field.state.isInitial);
 
     if (isFormValid != state.isFormDataValid || isInitial != state.isInitial) {
-      emit(state.copyWith(
-        isInitial: isInitial,
-        isFormValid: isFormValid,
-      ));
+      emit(state.copyWith(isInitial: isInitial, isFormValid: isFormValid));
     }
   }
 
@@ -78,18 +71,14 @@ abstract class SinglePageFormCubit extends FormCubit<SinglePageFormState> {
       var asyncValid = await asyncValidation();
       if (asyncValid) {
         await onSubmit();
-        emit(state.copyWith(
-          isBusy: false,
-          isSubmitted: true,
-          isErrorShown: false,
-        ));
+        emit(
+          state.copyWith(isBusy: false, isSubmitted: true, isErrorShown: false),
+        );
       } else {
         setShowErrorOnAllFields();
-        emit(state.copyWith(
-          isBusy: false,
-          isErrorShown: true,
-          isFormValid: false,
-        ));
+        emit(
+          state.copyWith(isBusy: false, isErrorShown: true, isFormValid: false),
+        );
       }
     } else {
       setShowErrorOnAllFields();

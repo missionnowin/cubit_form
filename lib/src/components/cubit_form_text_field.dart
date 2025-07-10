@@ -25,6 +25,7 @@ class CubitFormTextField extends StatefulWidget {
     this.onEditingComplete,
     this.textInputAction = TextInputAction.done,
     this.autocorrect = false,
+    this.autofillHints = const [],
   });
 
   final FieldCubit<String> formFieldCubit;
@@ -45,6 +46,7 @@ class CubitFormTextField extends StatefulWidget {
   final VoidCallback? onEditingComplete;
   final TextInputAction textInputAction;
   final bool autocorrect;
+  final List<String> autofillHints;
 
   @override
   CubitFormTextFieldState createState() => CubitFormTextFieldState();
@@ -107,6 +109,7 @@ class CubitFormTextFieldState extends State<CubitFormTextField> {
           autocorrect: widget.autocorrect,
           autofocus: widget.autofocus,
           enabled: !widget.isDisabled,
+          autofillHints: widget.autofillHints,
           maxLines: widget.maxLines,
           cursorColor: widget.cursorColor,
           focusNode: widget.focusNode,

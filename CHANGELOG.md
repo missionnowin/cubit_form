@@ -1,3 +1,5 @@
+## 3.0.6
+- add autofillHints
 ## 3.0.5
 - add autocorrect 
 ## 3.0.4

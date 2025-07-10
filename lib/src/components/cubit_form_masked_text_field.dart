@@ -21,6 +21,7 @@ class CubitFormMaskedTextField extends StatefulWidget {
     this.prefixText,
     this.hintText,
     this.onEditingComplete,
+    this.autofillHints = const <String>[],
     Key? key,
   }) : super(key: key);
 
@@ -37,6 +38,7 @@ class CubitFormMaskedTextField extends StatefulWidget {
   final Color? cursorColor;
   final bool autofocus;
   final VoidCallback? onEditingComplete;
+  final List<String> autofillHints;
 
   @override
   CubitFormMaskedTextFieldState createState() =>
@@ -82,6 +84,7 @@ class CubitFormMaskedTextFieldState extends State<CubitFormMaskedTextField> {
       formFieldCubit: widget.formFieldCubit,
       keyboardType: widget.keyboardType,
       decoration: widget.decoration,
+      autofillHints: widget.autofillHints,
       inputFormatters: [
         widget.maskFormatter,
       ],

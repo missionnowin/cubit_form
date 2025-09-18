@@ -43,6 +43,12 @@ class FieldCubit<T> extends Cubit<FieldCubitState<T>> {
           error: error,
         ),
       );
+  
+  void resetError() => emit(
+        state.copyWith(
+          error: null
+        )
+      );
 
   void errorCheck() => emit(
         state.errorCheck(

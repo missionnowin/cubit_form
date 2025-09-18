@@ -44,6 +44,12 @@ class FieldCubit<T> extends Cubit<FieldCubitState<T>> {
           skipValidation: true,
         ),
       );
+  
+  void resetError() => emit(
+        state.copyWith(
+          error: null
+        )
+  );
 
   /// for dependent validation like password and confirm password
   void errorCheck() => emit(
